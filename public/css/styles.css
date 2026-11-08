@@ -141,3 +141,19 @@ body.has-pdp-sticky footer{padding-bottom:72px}
 .pdp-top{grid-template-columns:minmax(0,1fr)}
 .pdp-top>*{min-width:0}
 @media (min-width:64rem){.pdp-top{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}}
+
+/* Product tabs inside a light grey panel */
+.pdp-tabs{background:#f4f4f4;border-radius:20px;padding:8px 12px 20px}
+@media (min-width:48rem){.pdp-tabs{padding:12px 32px 36px;border-radius:24px}}
+.pdp-tabs__list{border-bottom:1px solid #e2e2e2;gap:6px;padding-top:4px}
+.pdp-tab{border-radius:12px 12px 0 0}
+.pdp-tab[aria-selected=true]{background:#fff}
+.pdp-panel{padding-top:24px;max-width:none}
+.pdp-prose{max-width:52rem}
+.pdp-spec{background:#fff;border-radius:14px;overflow:hidden}
+.pdp-spec tr:nth-child(odd){background:#fff}
+.pdp-spec tr:nth-child(even){background:#fafafa}
+.pdp-spec th,.pdp-spec td{border-bottom:1px solid #ececec}
+.pdp-spec tr:last-child th,.pdp-spec tr:last-child td{border-bottom:0}
+.pdp-faq details{border-color:#e6e6e6}
+.pdp-faq summary::after{background:#f4f4f4}
