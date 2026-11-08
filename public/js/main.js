@@ -43,3 +43,70 @@ document.querySelectorAll('[data-carousel]').forEach(carousel => {
   }
   track.addEventListener('scroll', () => requestAnimationFrame(markActive), { passive: true });
 });
+
+// --- Product detail page (.pdp) ---
+(function () {
+  const pdp = document.querySelector('.pdp');
+  if (!pdp) return;
+  const money = n => '£' + n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  // Gallery
+  const main = document.getElementById('pdp-main-img');
+  pdp.querySelectorAll('.pdp-thumb').forEach(t => t.addEventListener('click', () => {
+    main.style.opacity = 0;
+    setTimeout(() => { main.src = t.dataset.src; main.style.opacity = 1; }, 120);
+    pdp.querySelectorAll('.pdp-thumb').forEach(o => { o.classList.toggle('is-active', o === t); o.setAttribute('aria-current', String(o === t)); });
+  }));
+
+  // Price: base + selected option surcharges, x quantity shown in sticky bar
+  const base = parseFloat(pdp.dataset.basePrice || '0');
+  const qty = document.getElementById('pdp-qty');
+  const priceEl = document.getElementById('pdp-price'), penceEl = document.getElementById('pdp-pence');
+  const exVat = document.getElementById('pdp-exvat'), sticky = document.getElementById('pdp-sticky-price');
+  function update() {
+    const extra = [...pdp.querySelectorAll('[data-option]')].reduce((s, el) => s + parseFloat(el.value || 0), 0);
+    const unit = base + extra;
+    const [pounds, pence] = unit.toFixed(2).split('.');
+    priceEl.textContent = Number(pounds).toLocaleString('en-GB');
+    penceEl.textContent = '.' + pence;
+    exVat.textContent = money(unit / 1.2);
+    const q = Math.max(1, parseInt(qty.value, 10) || 1);
+    if (sticky) sticky.textContent = money(unit * q) + (q > 1 ? ` (${q})` : '');
+  }
+  pdp.querySelectorAll('[data-option]').forEach(el => el.addEventListener('change', update));
+
+  // Quantity
+  const clamp = v => Math.min(99, Math.max(1, v || 1));
+  pdp.querySelectorAll('[data-qty]').forEach(b => b.addEventListener('click', () => { qty.value = clamp((parseInt(qty.value, 10) || 1) + Number(b.dataset.qty)); update(); }));
+  qty.addEventListener('change', () => { qty.value = clamp(parseInt(qty.value, 10)); update(); });
+  update();
+
+  // Tabs (arrow keys move between tabs)
+  const tabs = [...pdp.querySelectorAll('[role=tab]')];
+  function select(tab) {
+    tabs.forEach(t => {
+      const on = t === tab;
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => select(t));
+    t.addEventListener('keydown', e => {
+      const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (!d) return;
+      const n = tabs[(i + d + tabs.length) % tabs.length];
+      select(n); n.focus(); e.preventDefault();
+    });
+  });
+
+  // Mobile sticky buy bar: show once the main button scrolls out of view
+  const bar = document.querySelector('.pdp-sticky'), cta = pdp.querySelector('.pdp-actions');
+  if (bar && cta) {
+    let ticking = false;
+    const check = () => { bar.classList.toggle('is-visible', cta.getBoundingClientRect().bottom < 0); ticking = false; };
+    window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(check); } }, { passive: true });
+    check();
+  }
+})();
