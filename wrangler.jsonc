@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "specialist-components-site",
+  "main": "src/index.js",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    // Serve files exactly as named, so the existing /shop/*.html URLs keep working.
+    // Extensionless URLs (/about-us) fall through to src/index.js, which maps them to .html files.
+    "html_handling": "none",
+    "not_found_handling": "none"
+  },
+  "workers_dev": true,
+  "preview_urls": true
+}
