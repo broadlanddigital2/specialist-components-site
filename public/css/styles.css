@@ -232,3 +232,8 @@ body.has-pdp-sticky footer{padding-bottom:72px}
 /* missing-image fallback for card media */
 .ncard__media.is-empty,.pcard__media.is-empty{background:#f4f4f4 url("/images/logo.webp") center/64px no-repeat}
 .ncard__media.is-empty img,.pcard__media.is-empty img{display:none}
+
+/* Homepage hero: shorter banner */
+section[aria-roledescription=carousel] [role=group]{height:400px}
+@media (min-width:48rem){section[aria-roledescription=carousel] [role=group]{height:440px}section[aria-roledescription=carousel] [role=group]>div{padding-top:48px}}
+@media (min-width:80rem){section[aria-roledescription=carousel] [role=group]{height:520px}}
