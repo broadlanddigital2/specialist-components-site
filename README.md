@@ -22,6 +22,8 @@ npm run dev        # http://localhost:8787
 
 ## Deploy
 
+The repo is connected to the `specialist-components-site` Worker via Cloudflare Workers Builds, so every push to `main` redeploys.
+
 ```bash
 npx wrangler login
 npm run deploy     # publishes to https://specialist-components-site.<your-subdomain>.workers.dev
