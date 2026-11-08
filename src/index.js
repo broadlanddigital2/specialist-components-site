@@ -12,9 +12,17 @@ export default {
       return Response.redirect(url.toString(), 301);
     }
 
+    // Homepage.
+    if (path === "/") {
+      return env.ASSETS.fetch(new URL("/index.html", url));
+    }
+
+    // Clean URLs: /about-us -> /about-us.html, then /about-us/index.html.
     if (!path.split("/").pop().includes(".")) {
-      const res = await env.ASSETS.fetch(new URL(`${path}.html`, url));
-      if (res.ok) return res;
+      for (const candidate of [`${path}.html`, `${path}/index.html`]) {
+        const res = await env.ASSETS.fetch(new URL(candidate, url));
+        if (res.ok) return res;
+      }
     }
 
     const notFound = await env.ASSETS.fetch(new URL("/404.html", url));
