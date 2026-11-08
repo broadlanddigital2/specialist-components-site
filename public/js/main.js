@@ -110,3 +110,9 @@ document.querySelectorAll('[data-carousel]').forEach(carousel => {
     check();
   }
 })();
+
+// --- Card images: show a logo panel instead of a broken image ---
+document.querySelectorAll('.ncard__media img, .pcard__media img').forEach(img => {
+  const mark = () => img.parentElement.classList.add('is-empty');
+  if (img.complete && img.naturalWidth === 0) mark(); else img.addEventListener('error', mark);
+});
