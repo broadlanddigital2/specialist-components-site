@@ -11,8 +11,8 @@
   function setOpen(open) {
     btn.setAttribute('aria-expanded', String(open));
     btn.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
-    btn.querySelector('.icon-open').classList.toggle('hidden', open);
-    btn.querySelector('.icon-close').classList.toggle('hidden', !open);
+    btn.querySelector('.icon-open')?.classList.toggle('hidden', open);
+    btn.querySelector('.icon-close')?.classList.toggle('hidden', !open);
     panel.classList.remove(...(open ? CLOSED : OPEN));
     panel.classList.add(...(open ? OPEN : CLOSED));
     document.documentElement.style.overflow = open ? 'hidden' : '';
@@ -116,3 +116,46 @@ document.querySelectorAll('.ncard__media img, .pcard__media img').forEach(img =>
   const mark = () => img.parentElement.classList.add('is-empty');
   if (img.complete && img.naturalWidth === 0) mark(); else img.addEventListener('error', mark);
 });
+
+// --- Mega menu (desktop) ---
+(function () {
+  const trigger = document.querySelector('.mm-trigger');
+  const panel = document.getElementById('mega-menu');
+  const scrim = document.querySelector('.mm-scrim');
+  const header = document.querySelector('header');
+  if (!trigger || !panel) return;
+  let closeTimer, openedAt = 0;
+  const isOpen = () => trigger.getAttribute('aria-expanded') === 'true';
+  function open() {
+    clearTimeout(closeTimer);
+    if (isOpen()) return;
+    document.documentElement.style.setProperty('--mm-top', header.getBoundingClientRect().bottom + 'px');
+    trigger.setAttribute('aria-expanded', 'true');
+    panel.hidden = false; if (scrim) scrim.hidden = false;
+    openedAt = Date.now();
+  }
+  function close(focusTrigger) {
+    clearTimeout(closeTimer);
+    trigger.setAttribute('aria-expanded', 'false');
+    panel.hidden = true; if (scrim) scrim.hidden = true;
+    if (focusTrigger) trigger.focus();
+  }
+  const closeSoon = () => { closeTimer = setTimeout(() => close(false), 180); };
+
+  // A click straight after hover-open shouldn't immediately close it again.
+  trigger.addEventListener('click', () => { if (!isOpen()) open(); else if (Date.now() - openedAt > 400) close(false); });
+  // Hover to open on mouse/trackpad devices only
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    [trigger, panel].forEach(el => {
+      el.addEventListener('mouseenter', open);
+      el.addEventListener('mouseleave', closeSoon);
+    });
+  }
+  scrim && scrim.addEventListener('click', () => close(false));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && isOpen()) close(true); });
+  trigger.addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); open(); panel.querySelector('a')?.focus(); }
+  });
+  panel.addEventListener('focusout', e => { if (!panel.contains(e.relatedTarget) && e.relatedTarget !== trigger) close(false); });
+  window.addEventListener('resize', () => { if (window.innerWidth < 1024 && isOpen()) close(false); });
+})();
