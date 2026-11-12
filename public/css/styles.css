@@ -439,3 +439,20 @@ html.ss-open{overflow:hidden}
 .sc__link:hover{color:var(--brand-orange)}
 .sc__link:hover svg{transform:translateX(3px)}
 .sc-card.is-empty{background:#1a1a1a url("/images/logo.webp") center 40%/72px no-repeat}
+
+/* Product card grid (category & sub category listings) */
+.pcard-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.pcard-grid--spaced{margin-top:32px}
+@media (min-width:48rem){.pcard-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}.pcard-grid--spaced{margin-top:40px}}
+@media (min-width:64rem){.pcard-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}}
+.pcard-grid>li{display:flex;min-width:0}
+@media (max-width:47.99rem){
+  .pcard-grid .pcard{border-radius:14px}
+  .pcard-grid .pcard__body{padding:12px 12px 14px;gap:10px}
+  .pcard-grid .pcard__title{font-size:.8125rem}
+  .pcard-grid .pcard__price{font-size:1.25rem}
+  .pcard-grid .pcard__go{width:32px;height:32px}
+  .pcard-grid .pcard__go svg{width:15px;height:15px}
+}
+.pcard__from{display:block;font-size:.6875rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--grey);margin-bottom:3px}
+.pcard__poa{font-size:.875rem;font-weight:800;color:var(--grey)}
