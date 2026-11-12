@@ -175,3 +175,39 @@ document.querySelectorAll('.sc-card img').forEach(img => {
   const mark = () => { img.closest('.sc-card').classList.add('is-empty'); img.remove(); };
   if (img.complete && img.naturalWidth === 0) mark(); else img.addEventListener('error', mark);
 });
+
+// --- Mega menu v2: switch sub category pane on hover/focus; keyboard support ---
+(function () {
+  const tops = [...document.querySelectorAll('.mmx-top')];
+  if (!tops.length) return;
+  function show(t) {
+    tops.forEach(o => o.classList.toggle('is-active', o === t));
+    document.querySelectorAll('.mmx-pane').forEach(p => p.classList.toggle('is-active', p.id === t.dataset.pane));
+  }
+  let hoverTimer;
+  tops.forEach((t, i) => {
+    t.addEventListener('mouseenter', () => { clearTimeout(hoverTimer); hoverTimer = setTimeout(() => show(t), 70); });
+    t.addEventListener('mouseleave', () => clearTimeout(hoverTimer));
+    t.addEventListener('focus', () => show(t));
+    t.addEventListener('keydown', e => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault(); const n = tops[(i + (e.key === 'ArrowDown' ? 1 : -1) + tops.length) % tops.length]; n.focus();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault(); { const p = document.getElementById(t.dataset.pane); (p?.querySelector('.mmx-links a, .mmx-prods a') || p?.querySelector('a'))?.focus(); }
+      }
+    });
+  });
+  document.querySelectorAll('.mmx-pane').forEach(p => p.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') { e.preventDefault(); document.querySelector(`.mmx-top[data-pane="${p.id}"]`)?.focus(); }
+  }));
+  // reset to first category whenever the menu opens
+  const trig = document.querySelector('.mm-trigger');
+  trig && new MutationObserver(() => { if (trig.getAttribute('aria-expanded') === 'true') show(tops[0]); }).observe(trig, { attributes: true, attributeFilter: ['aria-expanded'] });
+})();
+
+// --- Mobile menu: expand sub categories ---
+document.querySelectorAll('.mmx-mtoggle').forEach(b => b.addEventListener('click', () => {
+  const open = b.getAttribute('aria-expanded') !== 'true';
+  b.setAttribute('aria-expanded', String(open));
+  document.getElementById(b.getAttribute('aria-controls')).hidden = !open;
+}));
