@@ -159,3 +159,19 @@ document.querySelectorAll('.ncard__media img, .pcard__media img').forEach(img =>
   panel.addEventListener('focusout', e => { if (!panel.contains(e.relatedTarget) && e.relatedTarget !== trigger) close(false); });
   window.addEventListener('resize', () => { if (window.innerWidth < 1024 && isOpen()) close(false); });
 })();
+
+// "All categories" links open the mega menu on desktop, or the mobile menu's category list
+document.querySelectorAll('[data-open-menu]').forEach(a => a.addEventListener('click', e => {
+  e.preventDefault();
+  const mm = document.querySelector('.mm-trigger');
+  if (window.innerWidth >= 1024 && mm) { window.scrollTo({ top: 0, behavior: 'smooth' }); mm.click(); return; }
+  const t = document.getElementById('menu-toggle');
+  if (t && t.getAttribute('aria-expanded') !== 'true') t.click();
+  const d = document.querySelector('.mm-mobile'); if (d) d.open = true;
+}));
+
+// Category cards: logo panel instead of a broken image
+document.querySelectorAll('.sc-card img').forEach(img => {
+  const mark = () => { img.closest('.sc-card').classList.add('is-empty'); img.remove(); };
+  if (img.complete && img.naturalWidth === 0) mark(); else img.addEventListener('error', mark);
+});
