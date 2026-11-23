@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Mobile preview | Specialist Components redesign</title>
+<link rel="stylesheet" href="/css/styles.css">
+<style>
+  :root{--phone-w:390px;--phone-h:844px}
+  html,body{height:100%}
+  body{margin:0;background:#ececec;color:#111;font-family:var(--default-font-family)}
+  .pv{min-height:100%;display:grid;grid-template-columns:auto minmax(0,1fr);gap:48px;align-items:start;max-width:1280px;margin:0 auto;padding:32px 32px 48px}
+  @media (max-width:900px){.pv{grid-template-columns:1fr;justify-items:center;padding:20px}}
+
+  /* phone */
+  .pv-device{position:sticky;top:24px;display:grid;justify-items:center;gap:14px}
+  .pv-phone{position:relative;width:calc(var(--phone-w) + 24px);height:calc(var(--phone-h) + 24px);padding:12px;border-radius:56px;background:#111;box-shadow:0 0 0 2px #2b2b2b inset,0 40px 80px -30px #0007;box-sizing:border-box}
+  .pv-screen{position:relative;width:var(--phone-w);height:var(--phone-h);border-radius:40px;overflow:hidden;background:#fff}
+  .pv-screen iframe{display:block;width:100%;height:100%;border:0}
+  .pv-bar{display:flex;align-items:center;gap:6px;width:calc(var(--phone-w) + 24px);box-sizing:border-box}
+  .pv-btn{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:#fff;border:1px solid #ddd;cursor:pointer;color:#111}
+  .pv-btn:hover{border-color:#111}
+  .pv-btn svg{width:18px;height:18px}
+  .pv-url{flex:1;min-width:0;height:40px;display:flex;align-items:center;padding:0 12px;border-radius:12px;background:#fff;border:1px solid #ddd;font-size:.8125rem;font-weight:700;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pv-sizes{display:flex;gap:6px}
+  .pv-size{height:32px;padding:0 12px;border-radius:999px;border:1px solid #ccc;background:#fff;font-size:.75rem;font-weight:800;cursor:pointer}
+  .pv-size[aria-pressed=true]{background:#111;color:#fff;border-color:#111}
+
+  /* side panel */
+  .pv-side{display:grid;gap:20px;max-width:640px}
+  .pv-eyebrow{font-size:.75rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--brand-orange)}
+  .pv-title{margin:6px 0 0;font-size:2rem;line-height:1.1;font-weight:900}
+  .pv-lead{margin:10px 0 0;font-size:.9375rem;line-height:1.6;color:#444}
+  .pv-card{background:#fff;border-radius:20px;padding:20px 22px}
+  .pv-card h2{margin:0 0 12px;font-size:.75rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#666}
+  .pv-links{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  @media (max-width:520px){.pv-links{grid-template-columns:1fr}}
+  .pv-link{display:block;width:100%;padding:11px 12px;border-radius:12px;background:#f5f5f5;border:0;font:inherit;font-size:.875rem;font-weight:800;text-align:left;cursor:pointer;color:#111}
+  .pv-link small{display:block;font-size:.6875rem;font-weight:700;color:#777;margin-top:2px}
+  .pv-link:hover{background:#fff4f1;color:#b8391c}
+  .pv-link[aria-current=true]{background:#111;color:#fff}
+  .pv-link[aria-current=true] small{color:#bbb}
+  .pv-check{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+  .pv-check label{display:flex;gap:10px;align-items:flex-start;font-size:.875rem;line-height:1.45;cursor:pointer}
+  .pv-check input{margin-top:2px;width:18px;height:18px;accent-color:#fe5c3a;flex:none}
+  .pv-check label:has(input:checked) span{color:#888;text-decoration:line-through}
+  .pv-note{font-size:.8125rem;line-height:1.55;color:#555}
+  .pv-note a{color:var(--brand-blue);font-weight:800;text-decoration:underline}
+  .pv-progress{font-size:.75rem;font-weight:800;color:#777;margin-left:6px}
+  .pv-phone-only{display:none}
+  @media (max-width:520px){
+    .pv-device{display:none}
+    .pv-phone-only{display:block}
+  }
+</style>
+</head>
+<body>
+<div class="pv">
+  <div class="pv-device">
+    <div class="pv-sizes" role="group" aria-label="Phone size">
+      <button type="button" class="pv-size" data-w="375" data-h="667" aria-pressed="false">Small 375</button>
+      <button type="button" class="pv-size" data-w="390" data-h="844" aria-pressed="true">iPhone 390</button>
+      <button type="button" class="pv-size" data-w="430" data-h="932" aria-pressed="false">Large 430</button>
+    </div>
+    <div class="pv-phone">
+      <div class="pv-screen">
+        <iframe id="pv-frame" title="Mobile preview of the Specialist Components site" src="/"></iframe>
+      </div>
+    </div>
+    <div class="pv-bar">
+      <button type="button" class="pv-btn" id="pv-back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+      <button type="button" class="pv-btn" id="pv-home" aria-label="Home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z"/></svg></button>
+      <span class="pv-url" id="pv-url">/</span>
+      <button type="button" class="pv-btn" id="pv-reload" aria-label="Reload"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg></button>
+      <a class="pv-btn" id="pv-open" href="/" target="_blank" rel="noopener" aria-label="Open this page in a new tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg></a>
+    </div>
+  </div>
+
+  <div class="pv-side">
+    <div>
+      <p class="pv-eyebrow">Specialist Components redesign</p>
+      <h1 class="pv-title">Mobile preview</h1>
+      <p class="pv-lead">The phone shows the live redesign at real phone width. Everything is clickable: the menu, search, product options and tabs. Use the shortcuts to jump between key pages, then tick off the checklist before the Next.js export.</p>
+      <p class="pv-note pv-phone-only">You're on a phone, so open the <a href="/">site directly</a>. It's the same thing at your screen size.</p>
+    </div>
+
+    <div class="pv-card">
+      <h2>Key pages</h2>
+      <div class="pv-links" id="pv-links">
+        <button type="button" class="pv-link" data-url="/">Homepage<small>Hero, categories, product rows, news, contact</small></button>
+        <button type="button" class="pv-link" data-url="/shop/classic-mini-performance-parts.html">Category<small>Classic Mini: sub category grid, FAQs</small></button>
+        <button type="button" class="pv-link" data-url="/shop/classic-mini-split-rim-wheels.html">Product listing<small>Split Rim Wheels: product cards</small></button>
+        <button type="button" class="pv-link" data-url="/shop/sc-ecu-usb-can-pc-interface.html">Product page, new layout<small>ECU example: options, qty, tabs</small></button>
+        <button type="button" class="pv-link" data-url="/shop/sc-billet-gearknob.html">Product page, original<small>For comparison</small></button>
+        <button type="button" class="pv-link" data-url="/search?q=throttle">Search results<small>"throttle"</small></button>
+        <button type="button" class="pv-link" data-url="/shop/engine-management.html">Category, 3 ranges<small>Engine Management</small></button>
+        <button type="button" class="pv-link" data-url="/contact-us">Contact us</button>
+        <button type="button" class="pv-link" data-url="/about-us">About us</button>
+        <button type="button" class="pv-link" data-url="/engineering">404 page<small>The Engineering link (broken on dev too)</small></button>
+      </div>
+    </div>
+
+    <div class="pv-card">
+      <h2>Check before the Next.js export <span class="pv-progress" id="pv-progress"></span></h2>
+      <ul class="pv-check" id="pv-check">
+        <li><label><input type="checkbox"><span>Menu: tap the burger. Categories open by default, and sub categories expand with the arrows.</span></label></li>
+        <li><label><input type="checkbox"><span>Search: tap the magnifying glass and type "throttle" or a SKU. Results show photo, price and stock.</span></label></li>
+        <li><label><input type="checkbox"><span>Homepage: the hero is shorter, the category cards and product cards use the new style, and the news and Get in touch sections are redesigned.</span></label></li>
+        <li><label><input type="checkbox"><span>Category pages: the sub category grid and the FAQ section at the bottom.</span></label></li>
+        <li><label><input type="checkbox"><span>Product listing: the product cards are two per row and the prices are easy to read.</span></label></li>
+        <li><label><input type="checkbox"><span>ECU product page: the gallery, option dropdowns change the price, the quantity box works, the tabs work, and the buy bar appears when you scroll.</span></label></li>
+        <li><label><input type="checkbox"><span>Footer: the email address shows correctly, and the phone and email links work.</span></label></li>
+        <li><label><input type="checkbox"><span>Wording to confirm: "Designed and built in Norfolk", "We usually reply within one working day", and the SC Cars "coming soon" note.</span></label></li>
+      </ul>
+    </div>
+
+    <p class="pv-note">Known gaps: about 550 product photos still need adding, so some cards show a logo placeholder. Search, basket, sign-in and forms are front end only. Only the ECU page has the new product layout so far.</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  const frame = document.getElementById('pv-frame');
+  const url = document.getElementById('pv-url');
+  const open = document.getElementById('pv-open');
+  const links = [...document.querySelectorAll('.pv-link')];
+  const go = u => { frame.src = u; };
+
+  // start page from ?page=
+  const start = new URLSearchParams(location.search).get('page');
+  if (start && start.startsWith('/')) go(start);
+
+  frame.addEventListener('load', () => {
+    let path = '/';
+    try { const l = frame.contentWindow.location; path = l.pathname + l.search + l.hash; } catch (e) {}
+    url.textContent = path; open.href = path;
+    const clean = path.replace(/\.html$/, '');
+    links.forEach(b => b.setAttribute('aria-current', String(b.dataset.url.replace(/\.html$/, '') === clean)));
+    const q = new URLSearchParams(location.search); q.set('page', path);
+    history.replaceState(null, '', location.pathname + '?' + q.toString());
+  });
+  links.forEach(b => b.addEventListener('click', () => go(b.dataset.url)));
+  document.getElementById('pv-back').addEventListener('click', () => { try { frame.contentWindow.history.back(); } catch (e) {} });
+  document.getElementById('pv-home').addEventListener('click', () => go('/'));
+  document.getElementById('pv-reload').addEventListener('click', () => { try { frame.contentWindow.location.reload(); } catch (e) { go(frame.src); } });
+
+  // phone sizes
+  document.querySelectorAll('.pv-size').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.pv-size').forEach(o => o.setAttribute('aria-pressed', String(o === b)));
+    document.documentElement.style.setProperty('--phone-w', b.dataset.w + 'px');
+    document.documentElement.style.setProperty('--phone-h', b.dataset.h + 'px');
+  }));
+
+  // checklist, remembered in this browser
+  const boxes = [...document.querySelectorAll('#pv-check input')];
+  const progress = document.getElementById('pv-progress');
+  let saved = [];
+  try { saved = JSON.parse(localStorage.getItem('sc-preview-check') || '[]'); } catch (e) {}
+  boxes.forEach((b, i) => { b.checked = !!saved[i]; });
+  const update = () => {
+    progress.textContent = `${boxes.filter(b => b.checked).length}/${boxes.length}`;
+    try { localStorage.setItem('sc-preview-check', JSON.stringify(boxes.map(b => b.checked))); } catch (e) {}
+  };
+  boxes.forEach(b => b.addEventListener('change', update)); update();
+})();
+</script>
+</body>
+</html>
