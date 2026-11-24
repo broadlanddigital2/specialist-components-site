@@ -83,7 +83,7 @@ import { categories } from "@/data/categories"; // or build from the API
 ```tsx
 // app/shop/category/[slug]/page.tsx
 const cat = await getCategory(slug);
-const faqs = buildCategoryFaqs({ name: cat.name, subcategories: cat.subcategories, products: cat.products });
+const faqs = buildCategoryFaqs({ name: cat.name, subcategories: cat.subcategories.map(s => s.name), products: cat.products });
 
 {cat.subcategories.length > 0 && (
   <CategoryGrid eyebrow="Browse" title={`${cat.name} categories`} tiles={cat.subcategories} />

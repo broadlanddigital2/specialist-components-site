@@ -30,8 +30,8 @@ export function MegaMenu({ categories, productsByCategory = {}, emptyNote }: Pro
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const topRefs = useRef<(HTMLAnchorElement | null)[]>([]);
-  const closeTimer = useRef<ReturnType<typeof setTimeout>>();
-  const hoverTimer = useRef<ReturnType<typeof setTimeout>>();
+  const closeTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const hoverTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const openedAt = useRef(0);
   const canHover = useRef(false);
 
