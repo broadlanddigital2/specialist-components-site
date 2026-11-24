@@ -5,13 +5,14 @@ import { formatPrice, priceParts } from "@/lib/format";
 import type { ProductSummary } from "./types";
 
 /** Homepage / listing product card: large price, clean bordered card, always-visible arrow. */
-export function ProductCard({ product }: { product: ProductSummary }) {
+export function ProductCard({ product, compactOnMobile = false }: { product: ProductSummary; compactOnMobile?: boolean }) {
   const p = priceParts(product.price);
+  const c = compactOnMobile;
   return (
     <Link
       href={product.href}
       aria-label={`${product.name}, ${formatPrice(product.price)}`}
-      className="group flex w-full flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white text-secondary transition duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue pointer-fine:hover:-translate-y-0.75 pointer-fine:hover:border-neutral-300 pointer-fine:hover:shadow-[0_12px_28px_-12px_rgb(0_0_0/0.2)]"
+      className={`group flex w-full flex-col overflow-hidden ${c ? "rounded-[14px] md:rounded-2xl" : "rounded-2xl"} border border-neutral-200 bg-white text-secondary transition duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue pointer-fine:hover:-translate-y-0.75 pointer-fine:hover:border-neutral-300 pointer-fine:hover:shadow-[0_12px_28px_-12px_rgb(0_0_0/0.2)]`}
     >
       <div className="relative aspect-4/3 overflow-hidden bg-neutral-100">
         <Image
@@ -22,17 +23,17 @@ export function ProductCard({ product }: { product: ProductSummary }) {
           className="object-cover transition-transform duration-500 pointer-fine:group-hover:scale-[1.04]"
         />
       </div>
-      <div className="flex flex-1 flex-col gap-3.5 px-4 pt-4 pb-4.5 md:px-5 md:pt-4.5 md:pb-5">
-        <h3 className="line-clamp-2 min-h-[2.7em] text-[15px] leading-snug font-bold">{product.name}</h3>
+      <div className={`flex flex-1 flex-col ${c ? "gap-2.5 px-3 pt-3 pb-3.5" : "gap-3.5 px-4 pt-4 pb-4.5"} md:gap-3.5 md:px-5 md:pt-4.5 md:pb-5`}>
+        <h3 className={`line-clamp-2 min-h-[2.7em] ${c ? "text-[13px] md:text-[15px]" : "text-[15px]"} leading-snug font-bold`}>{product.name}</h3>
         <div className="mt-auto flex items-center justify-between gap-3">
-          <p className="text-[26px] leading-none font-black tracking-tight whitespace-nowrap md:text-3xl">
+          <p className={`${c ? "text-xl" : "text-[26px]"} leading-none font-black tracking-tight whitespace-nowrap md:text-3xl`}>
             <span className="mr-px align-[0.45em] text-[0.6em] font-extrabold">{p.currency}</span>
             {p.pounds}
             <span className="text-[0.55em] font-extrabold text-grey">{p.pence}</span>
           </p>
           <span
             aria-hidden="true"
-            className="grid size-10 flex-none place-items-center rounded-full bg-brand-orange text-white transition duration-300 pointer-fine:group-hover:translate-x-0.5 pointer-fine:group-hover:bg-brand-blue"
+            className={`grid ${c ? "size-8 md:size-10" : "size-10"} flex-none place-items-center rounded-full bg-brand-orange text-white transition duration-300 pointer-fine:group-hover:translate-x-0.5 pointer-fine:group-hover:bg-brand-blue`}
           >
             <ArrowRight className="size-4.5" strokeWidth={2.5} />
           </span>
